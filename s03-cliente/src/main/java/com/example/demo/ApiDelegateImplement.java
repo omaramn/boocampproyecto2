@@ -1,17 +1,15 @@
 package com.example.demo;
-
 import com.example.demo.api.ClientsApiDelegate;
 import com.example.demo.model.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 @Component
-public class ApiDelegateImplement implements ClientsApiDelegate {
+public class Apidelegateimplement implements ClientsApiDelegate {
     /**
      * Para acceder a clientService.
      */
@@ -34,7 +32,7 @@ public class ApiDelegateImplement implements ClientsApiDelegate {
      */
     @Override
     public ResponseEntity<Void> createClient(final Client client) {
-        Client createdClient = null;
+        Client createdClient = clientService.createClient(client);
         if (createdClient != null) {
             return ResponseEntity.created(URI.create("/clients/" + createdClient.getId())).build();
         } else {
@@ -54,21 +52,21 @@ public class ApiDelegateImplement implements ClientsApiDelegate {
 
     /**
      * Método para guardar una transacción.
-     * @param clientId variable strimg.
+     * @param clientId variable Client.
      * @return Client.
      */
     @Override
     public ResponseEntity<Client> getClientById(final String clientId) {
         Client client = clientService.getClientById(clientId);
         if (client == null) {
-            return ResponseEntity.notFound().build(); // Respuesta 404 si el cliente no se encuentra o si el ID no es válido.
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(client); // Respuesta 200 con el cliente encontrado.
+        return ResponseEntity.ok(client);
     }
 
     /**
      * Método para guardar una transacción.
-     * @param ids lista de string.
+     * @param ids variable String.
      * @return Client lista de clinentes.
      */
     @Override
@@ -81,4 +79,3 @@ public class ApiDelegateImplement implements ClientsApiDelegate {
         }
     }
 }
-

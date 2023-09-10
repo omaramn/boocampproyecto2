@@ -1,7 +1,10 @@
 package com.example.demo.mapper;
-
-import com.example.demo.entitys.ClientEntity;
+import com.example.demo.document.ClientEntity;
+import com.example.demo.document.TipoClienteEntity;
+import com.example.demo.document.PerfilEntity;
 import com.example.demo.model.Client;
+import com.example.demo.model.Perfil;
+import com.example.demo.model.TipoCliente;
 public class ClientMapper {
     /**
      * Método para ClientMapper.
@@ -12,28 +15,40 @@ public class ClientMapper {
         return ClientEntity.builder()
                 .id(clientDto.getId())
                 .name(clientDto.getName())
-                .dni(clientDto.getDni())
-                .type(dtoTypeToEntityType(clientDto.getType()))
+                .document(clientDto.getDocumento())
+                .type(dtoTypeToEntityType(clientDto.getTipoCliente()))
                 .build();
     }
 
     /**
      * Método para ClientMapper.
-     * @param typeEnum parametro de Client.TypeEnum.
-     * @return ClientEntity.ClientType.
+     * @param typeDto parametro de TipoCliente.
+     * @return TipoClienteEntity.
      */
-    private static ClientEntity.ClientType dtoTypeToEntityType(final Client.TypeEnum typeEnum) {
-        if (typeEnum == null) {
+    private static TipoClienteEntity dtoTypeToEntityType(final TipoCliente typeDto) {
+        if (typeDto == null) {
             return null;
         }
-        switch (typeEnum) {
-            case PERSONAL:
-                return ClientEntity.ClientType.PERSONAL;
-            case EMPRESARIAL:
-                return ClientEntity.ClientType.EMPRESARIAL;
-            default:
-                throw new IllegalArgumentException("Unexpected type: " + typeEnum);
+        return TipoClienteEntity.builder()
+                .id(typeDto.getId())
+                .nombre(typeDto.getNombre())
+                .perfil(dtoPerfilToEntityPerfil(typeDto.getPerfil()))
+                .build();
+    }
+
+    /**
+     * Método para ClientMapper.
+     * @param perfilDto parametro de Perfil.
+     * @return PerfilEntity.
+     */
+    private static PerfilEntity dtoPerfilToEntityPerfil(final Perfil perfilDto) {
+        if (perfilDto == null) {
+            return null;
         }
+        return PerfilEntity.builder()
+                .id(perfilDto.getId())
+                .nombre(perfilDto.getNombre())
+                .build();
     }
 
     /**
@@ -45,28 +60,36 @@ public class ClientMapper {
         return new Client()
                 .id(entity.getId())
                 .name(entity.getName())
-                .dni(entity.getDni())
-                .type(entityTypeToDtoType(entity.getType()));
+                .documento(entity.getDocument())
+                .tipoCliente(entityTypeToDtoType(entity.getType()));
     }
 
     /**
      * Método para ClientMapper.
-     * @param clientType parametro de ClientEntity.ClientType.
-     * @return Client.TypeEnum.
+     * @param entityType parametro de TipoClienteEntity.
+     * @return TipoCliente.
      */
-    private static Client.TypeEnum entityTypeToDtoType(final ClientEntity.ClientType clientType) {
-        if (clientType == null) {
+    public static TipoCliente entityTypeToDtoType(final TipoClienteEntity entityType) {
+        if (entityType == null) {
             return null;
         }
-        switch (clientType) {
-            case PERSONAL:
-                return Client.TypeEnum.PERSONAL;
-            case EMPRESARIAL:
-                return Client.TypeEnum.EMPRESARIAL;
-            default:
-                throw new IllegalArgumentException("Unexpected type: " + clientType);
+        return new TipoCliente()
+                .id(entityType.getId())
+                .nombre(entityType.getNombre())
+                .perfil(entityPerfilToDtoPerfil(entityType.getPerfil()));
+    }
+
+    /**
+     * Método para ClientMapper.
+     * @param perfilEntity parametro de PerfilEntity.
+     * @return Perfil.
+     */
+    private static Perfil entityPerfilToDtoPerfil(final PerfilEntity perfilEntity) {
+        if (perfilEntity == null) {
+            return null;
         }
+        return new Perfil()
+                .id(perfilEntity.getId())
+                .nombre(perfilEntity.getNombre());
     }
 }
-
-

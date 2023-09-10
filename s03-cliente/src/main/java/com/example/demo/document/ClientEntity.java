@@ -1,8 +1,8 @@
-package com.example.demo.entitys;
-
+package com.example.demo.document;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -24,27 +24,13 @@ public class ClientEntity {
     private String name;
 
     /**
-     * Identificador único del dni.
+     * Identificador único del document.
      */
-    private String dni;
+    private String document;
 
     /**
      * Identificador único del type.
      */
-    private ClientType type;
-
-    /**
-     * Identificador único del ClientType.
-     */
-    public enum ClientType {
-        /**
-         * Identificador único del PERSONAL.
-         */
-        PERSONAL,
-        /**
-         * Identificador único del EMPRESARIAL.
-         */
-        EMPRESARIAL
-    }
+    @DBRef
+    private TipoClienteEntity type;
 }
-
